@@ -4,7 +4,10 @@ let TokenTypes = {
 	PLUS:3,
 	MINUS:4,
 	EQUAL:5,
-	EQUAL_EQUAL:6,
+	SLASH:6,
+	EQUAL_EQUAL:7,
+	STRING:8,
+	NUM:9
 
 
 }
@@ -16,10 +19,12 @@ class Scanner {
 		this.current=0;
 	}
 	scanTokens(){
-
+		while(!this.isEnd()){
+			this.scanToken()
+		}
 	}
 	scanToken(){
-		let c=advance()
+		let c=this.advance()
 		switch (c){
 			// 符号
 			case '(':addToken(TokenTypes.LEFT_PAREN,null);break;
@@ -28,29 +33,84 @@ class Scanner {
 			case '-':addToken(TokenTypes.MINUS,null);break;
 			// 需要向前看才能处理的符号
 			case '=':addToken(match('=') ? TokenTypes.EQUAL_EQUAL : TokenTypes.EQUAL);break;
-			
+			case '/':
+				if(match('/')){
+					while(unmatch('\n') || !isEnd());
+				}else{
+					addToken(TokenTypes.SLASH)
+				}
+			case ' ':
+			case '\n':
+			case '\t':
+			case '\r':
+				break;
 
+			case '"':
+				this.string();break;
+			default:
+				if(this.isDigit(c)){
+					this.num();
+				}else{
+					console.log("unmatched "+ c)
+				}
 		}
+		
 
+	}
+	isDigit(x){
+		if(x >= '0' && x<= '9')
+			return true;
+		return false;
+	}
+	num(){
+		while(this.isDigit(this.source[this.current])){
+			this.advance();
+		}
+		let intVal=this.source.substring(this.start,this.current)
+		this.addToken(TokenTypes.NUM,parseInt(intVal))
+	}
+	string(){
+		while(this.unmatch('"'));
+		let str=this.source.substring(this.start+1,this.current)
+		this.current++;
+		this.addToken(TokenTypes.STRING,str)
 	}
 	addToken(type,val){
-		return new Token(type,val)
+		this.start=this.current;
+		this.tokens.push(new Token(type,val))
 	}
 	advance(){
-		return this.source[current++]
+		return this.source[this.current++]
 	}
 	match(x){
 		if(this.source[current] === x){
-			current++:
+			current++;
 			return true;
 		}
 		return false;
 	}
+	unmatch(x){
+		if(this.source[this.current] !== x){
+			this.current++;
+			return true;
+		}
+		return false
+	}
+	isEnd(){
+		if(this.current >= this.source.length){
+			return true
+		}
+		return false
+	}
 
 }
 class Token {
-	constructor(val,type){
+	constructor(type,val){
 		this.val=val
 		this.type=type
 	}
 }
+let code="\"abc\""
+let s=new Scanner(code)
+s.scanTokens()
+console.log(s.tokens)
