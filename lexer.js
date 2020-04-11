@@ -118,5 +118,6 @@ class Token {
 }
 
 module.exports={
-	Scanner
+	Scanner,
+	TokenTypes
 }

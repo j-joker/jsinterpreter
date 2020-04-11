@@ -3,7 +3,7 @@ const lex=require('./lexer')
 
 const Scanner=lex.Scanner
 const TokenTypes=lex.TokenTypes
-const BinarytExpr=ast.BinaryExpr
+const BinaryExpr=ast.BinaryExpr
 const Primary=ast.Primary
 const Operator=ast.Operator
 const printer=ast.printer
@@ -19,7 +19,7 @@ function expr(){
     let left=primary()
     let op=primary()
     let right=primary()
-    new BinaryExpr(op,left,right)
+    return new BinaryExpr(op,left,right)
 }
 function primary(){
     let x=advance()

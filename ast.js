@@ -32,6 +32,12 @@ class Operator{
 		this.type=type
 	}
 }
+function formatop(x){
+	switch (x){
+		case 3:
+			return "+"
+	}
+}
 
 function printer(expr){
 	if(expr instanceof BinaryExpr){
@@ -47,9 +53,9 @@ function printer(expr){
 		printer(expr.expr)
 	}
 	else if(expr instanceof Primary){
-		print(expr.val)
+		print(expr.val+" ")
 	}else if(expr instanceof Operator){
-		print(expr.type)
+		print(formatop(expr.type)+ " ")
 	}
 }
 
@@ -58,5 +64,8 @@ function printer(expr){
 
 
 module.exports={
-	BinaryExpr
+	BinaryExpr,
+	Primary,
+	Operator,
+	printer
 }
