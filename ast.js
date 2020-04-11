@@ -40,5 +40,9 @@ function printer(expr){
 	}
 }
 
-let x=new BinaryExpr('+',1,2)
-printer(x)
+
+
+
+module.exports={
+	BinaryExpr
+}

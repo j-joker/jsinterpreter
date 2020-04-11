@@ -121,8 +121,8 @@ class Token {
 
 
 
-// let code="\"abc\""
-let code="12"
-let s=new Scanner(code)
-s.scanTokens()
-console.log(s.tokens)
+
+
+module.exports={
+	Scanner
+}
