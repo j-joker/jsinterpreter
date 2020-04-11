@@ -8,29 +8,39 @@ const Primary=ast.Primary
 const Operator=ast.Operator
 const printer=ast.printer
 
-let code="123 + 23"
 let current=0
-let x=new Scanner(code)
-x.scanTokens()
-let tokens=x.tokens
+let tokens=[];
 
-
-function expr(){
-    let left=primary()
-    let op=primary()
-    let right=primary()
-    return new BinaryExpr(op,left,right)
-}
-function primary(){
-    let x=advance()
-    switch (x.type){
-        case TokenTypes.NUM:
-            return new Primary(x.val)
-        case TokenTypes.PLUS:
-            return new Operator(x.type)
+class Parser {
+    constructor(source){
+        this.source=source
+    }
+    init(){
+        let scan=new Scanner(this.source)
+        scan.scanTokens()
+        tokens=scan.tokens
+    }
+     expr(){
+        let left=this.primary()
+        let op=this.primary()
+        let right=this.primary()
+        return new BinaryExpr(op,left,right)
+    }
+     primary(){
+        let x=this.advance()
+        switch (x.type){
+            case TokenTypes.NUM:
+                return new Primary(x.val)
+            case TokenTypes.PLUS:
+                return new Operator(x.type)
+        }
+    }
+     advance(){
+        return tokens[current++]
     }
 }
-function advance(){
-    return tokens[current++]
+
+
+module.exports={
+    Parser
 }
-printer(expr())
