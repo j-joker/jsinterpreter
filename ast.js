@@ -22,6 +22,17 @@ class UnaryExpr {
 	}
 }
 
+class Primary {
+	constructor(val){
+		this.val=val
+	}
+}
+class Operator{
+	constructor(type){
+		this.type=type
+	}
+}
+
 function printer(expr){
 	if(expr instanceof BinaryExpr){
 		let {op ,left,right}=expr;
@@ -35,10 +46,13 @@ function printer(expr){
 		printer(expr.op)
 		printer(expr.expr)
 	}
-	else{
-		print(expr+" ")
+	else if(expr instanceof Primary){
+		print(expr.val)
+	}else if(expr instanceof Operator){
+		print(expr.type)
 	}
 }
+
 
 
 

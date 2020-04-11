@@ -34,23 +34,22 @@ class Scanner {
 		let c=this.advance()
 		switch (c){
 			// 符号
-			case '(':addToken(TokenTypes.LEFT_PAREN,null);break;
-			case ')':addToken(TokenTypes.RIGHT_PAREN,null);break;
-			case '+':addToken(TokenTypes.PLUS,null);break;
-			case '-':addToken(TokenTypes.MINUS,null);break;
+			case '(':this.addToken(TokenTypes.LEFT_PAREN,null);break;
+			case ')':this.addToken(TokenTypes.RIGHT_PAREN,null);break;
+			case '+':this.addToken(TokenTypes.PLUS,null);break;
+			case '-':this.addToken(TokenTypes.MINUS,null);break;
 			// 需要向前看才能处理的符号
-			case '=':addToken(this.ifMatchKeepMove('=') ? TokenTypes.EQUAL_EQUAL : TokenTypes.EQUAL);break;
+			case '=':this.addToken(this.ifMatchKeepMove('=') ? TokenTypes.EQUAL_EQUAL : TokenTypes.EQUAL);break;
 			case '/':
 				if(this.ifMatchKeepMove('/')){
-					while(this.ifUnmatchKeepMove('\n') || !isEnd());
+					while((!this.isEnd())&&this.ifUnmatchKeepMove('\n'));
 				}else{
-					addToken(TokenTypes.SLASH)
+					this.addToken(TokenTypes.SLASH)
 				}
 			case ' ':
 			case '\n':
 			case '\t':
 			case '\r':
-				this.current++;
 				break;
 
 			case '"':
@@ -80,7 +79,6 @@ class Scanner {
 	string(){
 		while(this.ifUnmatchKeepMove('"'));
 		let str=this.source.substring(this.start+1,this.current)
-		this.current++;
 		this.addToken(TokenTypes.STRING,str)
 	}
 	addToken(type,val){
@@ -118,10 +116,6 @@ class Token {
 		this.type=type
 	}
 }
-
-
-
-
 
 module.exports={
 	Scanner
